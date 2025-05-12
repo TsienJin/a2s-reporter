@@ -1,10 +1,10 @@
-# A2S Prometheus Exporter
+# A2S Prometheus Reporter
 
 [//]: # ([![Docker Pulls]&#40;https://img.shields.io/docker/pulls/your-dockerhub-username/a2s-exporter.svg&#41;]&#40;https://hub.docker.com/r/your-dockerhub-username/a2s-exporter&#41; <!-- Optional: Replace with your Docker Hub link -->)
 
 [//]: # (<!-- Add other badges if you have them &#40;build status, license, etc.&#41; -->)
 
-A simple, lightweight Dockerized Prometheus exporter written in Go. It queries a specified game server using the Valve A2S protocol and exposes key server metrics via an HTTP endpoint (`/metrics`) for Prometheus consumption.
+A simple, lightweight Dockerized Prometheus reporter written in Go. It queries a specified game server using the Valve A2S protocol and exposes key server metrics via an HTTP endpoint (`/metrics`) for Prometheus consumption.
 
 ## Features
 
