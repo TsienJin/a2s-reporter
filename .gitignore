@@ -1,0 +1,13 @@
+
+# IDE files
+.idea/
+.vs-code/
+
+# Env vars
+.env
+*.env
+*.env.*
+!*.env.sample
+
+# Other files to ignore
+*.ignore
