@@ -1,0 +1,66 @@
+version: '3'
+
+# Set the DOCKER_HOST environment variable globally for all tasks in this file.
+# This directs docker compose commands to the remote host via SSH.
+#env:
+#  DOCKER_HOST: ssh://user@host
+
+tasks:
+  # --- Core Deployment & Lifecycle Tasks ---
+
+  build:
+    desc: Build the a2s reporter image
+    cmds:
+      # Ensure the 'env' setting above targets the remote host
+      - docker compose build
+    preconditions:
+      - sh: "[ -x $(command -v docker) ]"
+        msg: "Local Docker CLI client is not installed or not in PATH."
+
+  run:
+    desc: Build (if needed) and deploy/start services
+    cmds:
+      # --build ensures custom images are built if they don't exist or context changed
+      # -d runs in detached mode
+      - docker compose --env-file Docker.env up --build
+    preconditions:
+      - sh: "[ -x $(command -v docker) ]"
+        msg: "Local Docker CLI client is not installed or not in PATH."
+
+  up:
+    desc: Build (if needed) and deploy/start services (detached)
+    cmds:
+      # --build ensures custom images are built if they don't exist or context changed
+      # -d runs in detached mode
+      - docker compose --env-file Docker.env up --build -d
+    preconditions:
+      - sh: "[ -x $(command -v docker) ]"
+        msg: "Local Docker CLI client is not installed or not in PATH."
+
+  down:
+    desc: Stop and remove containers and network on 'observe' (keeps volumes)
+    cmds:
+      - docker compose down
+    preconditions:
+      - sh: "[ -x $(command -v docker) ]"
+        msg: "Local Docker CLI client is not installed or not in PATH."
+
+  # --- Utility Tasks ---
+
+  logs:
+    desc: Follow logs from services on 'observe' (use -- TGT_SVC=service_name)
+    # Example: task logs -- TGT_SVC=grafana
+    cmds:
+      # Add --no-log-prefix for potentially cleaner output when following one service
+      - docker compose logs -f --tail=100 {{if .TGT_SVC}}--no-log-prefix {{.TGT_SVC}}{{end}}
+    vars:
+      TGT_SVC: "" # Variable to hold optional service name specified after --
+    preconditions:
+      - sh: "[ -x $(command -v docker) ]"
+        msg: "Local Docker CLI client is not installed or not in PATH."
+
+  # --- Default Task ---
+  default:
+    desc: Show available tasks for managing remote deployment on 'observe'
+    cmds:
+      - task --list-all

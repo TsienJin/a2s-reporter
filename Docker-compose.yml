@@ -1,0 +1,17 @@
+services:
+  a2s-reporter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${REPORTER_PORT:-3000}:${REPORTER_PORT:-3000}"
+    dns:
+      - ${DNS_SERVER:-host.docker.internal}
+    restart: unless-stopped
+    environment:
+      REPORTER_PORT: ${REPORTER_PORT:-3000}
+      GAME_A2S_ADDRESS: ${GAME_A2S_ADDRESS}
+      GAME_A2S_PORT: ${GAME_A2S_PORT}
+      QUERY_INTERVAL: ${QUERY_INTERVAL:-10000}
+      QUERY_TIMEOUT: ${QUERY_TIMEOUT:-3000}
+      QUERY_MAX_PACKET_SIZE: ${QUERY_MAX_PACKET_SIZE:-14000}
